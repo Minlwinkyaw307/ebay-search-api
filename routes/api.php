@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index']);
+Route::middleware(['pagination'])->get('/search', [\App\Http\Controllers\SearchController::class, 'index']);

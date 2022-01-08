@@ -4,96 +4,43 @@ namespace App\Models;
 
 class EBayItem
 {
+    /**
+     * @var string
+     */
     private $provider = "ebay";
-    private $itemId;
-    private $clickOutLink;
-    private $mainPhotoUrl;
+    private $item_id;
+    private $click_out_link;
+    private $main_photo_url;
     private $price;
-    private $priceCurrency;
-    private $shippingPrice;
+    private $price_currency;
+    private $shipping_price;
     private $title;
     private $description;
-    private $validUntil;
+    private $valid_until;
     private $brand;
 
-    /**
-     * @param mixed $itemId
-     */
-    public function setItemId($itemId): void
+    public function __construct($ebayItemArray)
     {
-        $this->itemId = $itemId;
+        $this->item_id = $ebayItemArray["itemId"][0];
+        $this->click_out_link = $ebayItemArray["viewItemURL"][0];
+        $this->main_photo_url = $ebayItemArray['galleryURL'][0];
+        $this->price = $ebayItemArray['sellingStatus'][0]['currentPrice'][0]['__value__'];
+        $this->price_currency = $ebayItemArray['sellingStatus'][0]['currentPrice'][0]['@currencyId'];
+        if (array_key_exists('shippingServiceCost', $ebayItemArray['shippingInfo'][0])) {
+            $this->shipping_price = $ebayItemArray['shippingInfo'][0]['shippingServiceCost'][0]['__value__'];
+        }
+        $this->title = $ebayItemArray['title'][0];
+        // didn't see any kind of description in response
+        $this->description = $ebayItemArray['title'][0];
+        $this->valid_until = $ebayItemArray['sellingStatus'][0]['timeLeft'][0];
+        // didn't find brand only see category
+        $this->brand = $ebayItemArray['primaryCategory'][0]['categoryName'][0];
     }
 
-    /**
-     * @param mixed $clickOutLink
-     */
-    public function setClickOutLink($clickOutLink): void
-    {
-        $this->clickOutLink = $clickOutLink;
-    }
 
-    /**
-     * @param mixed $mainPhotoUrl
-     */
-    public function setMainPhotoUrl($mainPhotoUrl): void
+    public function toArray(): array
     {
-        $this->mainPhotoUrl = $mainPhotoUrl;
-    }
-
-    /**
-     * @param mixed $price
-     */
-    public function setPrice($price): void
-    {
-        $this->price = $price;
-    }
-
-    /**
-     * @param mixed $priceCurrency
-     */
-    public function setPriceCurrency($priceCurrency): void
-    {
-        $this->priceCurrency = $priceCurrency;
-    }
-
-    /**
-     * @param mixed $shippingPrice
-     */
-    public function setShippingPrice($shippingPrice): void
-    {
-        $this->shippingPrice = $shippingPrice;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @param mixed $validUntil
-     */
-    public function setValidUntil($validUntil): void
-    {
-        $this->validUntil = $validUntil;
-    }
-
-    /**
-     * @param mixed $brand
-     */
-    public function setBrand($brand): void
-    {
-        $this->brand = $brand;
+        return get_object_vars($this);
     }
 
 

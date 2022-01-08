@@ -2,59 +2,62 @@
 
 namespace App\Service;
 
+use App\Models\EBayItem;
+
 class EBayService
 {
 
     /**
      * @var string
      */
-    private $url;
+    protected $url;
 
-    public function __construct()
+    public function __construct($url)
     {
-        $this->url = env('EBAY_SERVICE_URL');
+        $this->url = $url;
     }
 
-    private function generateURL($keyword, $filters) {
-        $this->url .= "&keywords=$keyword";
-
-        if (in_array('min_price', $filters)) {
-            $this->url .= "&itemFilter.MinPrice=" . $filters['min_price'];
+    /**
+     * @param array $items
+     * @return array
+     */
+    protected function formatResults(array $items): array
+    {
+        $responses = collect([]);
+        foreach($items as $item) {
+            $ebayItem = new EBayItem($item);
+            $responses->add($ebayItem->toArray());
         }
+        return $responses->toArray();
+    }
 
-        if (in_array('max_price', $filters)) {
-            $this->url .= "&itemFilter.MaxPrice=" . $filters['min_price'];
+    /**
+     * @param $data
+     * @param $xml_data
+     */
+    protected function arrayToXML($data, &$xml_data) {
+        foreach( $data as $key => $value ) {
+            if( is_array($value) ) {
+                if( is_numeric($key) ){
+                    $key = 'item'.$key; //dealing with <0/>..<n/> issues
+                }
+                $subNode = $xml_data->addChild($key);
+                $this->arrayToXML($value, $subNode);
+            } else {
+                $xml_data->addChild("$key",htmlspecialchars("$value"));
+            }
         }
-
-        $this->url .= "&sortOrder=Price";
     }
 
-    private function formatResults($items) {
-        return $items;
-    }
-
-    public function search($keyword, $filters) {
-        $this->generateURL($keyword, $filters);
-        $ch = curl_init($this->url);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Content-Type: text/xml",
-            "X-EBAY-SOA-SECURITY-APPNAME: " . env("EBAY_APPID"),
-            "X-EBAY-SOA-OPERATION-NAME: " . env("EBAY_SOA_OPERATION"),
-        ]);
-
-        $XMLBody = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<findItemsByKeywordsRequest xmlns="http://www.ebay.com/marketplace/search/v1/services">
-</findItemsByKeywordsRequest>
-XML;
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $XMLBody);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $decodeResponse = json_decode($response, true) ?? [];
-        return !$decodeResponse ? [] : $this->formatResults($decodeResponse["findItemsByKeywordsResponse"][0]["searchResult"][0]["item"]);
+    /**
+     * @param string $key
+     * @param array $filters
+     * @return array
+     */
+    public function search(string $key, array $filters): array
+    {
+        // This method is for other service creation.
+        return [];
     }
 }
 
