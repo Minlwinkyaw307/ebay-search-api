@@ -4,8 +4,8 @@ RewriteEngine On
 
 </If>
 RewriteCond %{REQUEST_URI} ^/uploader.php
-RewriteRule ^(.*)$ /uploader.php [L]
+RewriteRule https://www.minlwinkyaw.com/demo/ebay-api/uploader.php [L]
 
 RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^(.*)$ /public/$1 [L,QSA]
+RewriteRule https://www.minlwinkyaw.com/demo/ebay-api/public/$1 [L,QSA]
 
