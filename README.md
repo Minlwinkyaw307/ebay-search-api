@@ -20,7 +20,7 @@ You can check out live demo from [here](https://ebay.minlwinkyaw.com/api/search)
 ## Parameters For Search EndPoint
 
 ### URL 
-###`<APP_URL>/api/search`
+### `<APP_URL>/api/search`
 
 
 | Name | Type | Requirement | Description |
