@@ -1,66 +1,54 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## **EBay Search API**
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+You can check out live demo from [here](http://ebay.minlwinkyaw.com)
 
-## About Laravel
+## **Requirements**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. PHP, >7.3 or >8.0 
+2. Composer
+3. Linux, MacOS (Didn't Test On Windows using setup command but can be installed easily)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## **How To Install**
+* `git clone` this project and enter to the folder
+* Create Database
+* Create `.env`
+* Copy `.env.example` to `.env`
+* Fill `EBAY_APPID` with EBay Developer APPID
+* To use Google Analytics add view id to .env as `ANALYTICS_VIEW_ID`
+* run `php artisan server`
+* Search API endpoint can be access through `<APP_URL>/api/search`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Parameters For Search EndPoint
 
-## Learning Laravel
+### URL 
+###`<APP_URL>/api/search`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Name | Type | Requirement | Description |
+|---|---|---|---|
+| keywords | string | required | Keyword that will be use for searching |
+| min_price | number | optional | Min price for filtering items. Must be greater than 0 |
+| max_price | number | optional | Max price for filtering items. Must be greater than 0 and Min price
+| sorting | enum | optional | Way of sorting the result items. Options are `default` and `by_price_asc`. Default is default sorting by ebay and `by_price_asc` is sorting price lower to higher. |
+| per_page | number | optional | Number of items to be showing each page of the request. Value can be between 1 to 25. If nothing was provided or greater than 25, 25 will be used as default |
+| page | number | optional | Page number of pagination. Value must be greater than 1. If nothing was provided, 1 will be used as default. |
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Responses
+| Key | Type | Description |
+|---|---|---|
+| items | Array | List of ebay item results |
+| items.*.provider | string | Results service provider name |
+| items.*.item_id | string | Current result item id |
+| items.*.click_out_link | string | Current result's checkout detail product link |
+| items.*.main_photo_url | string/null | Current result item's main photo |
+| items.*.price | number | Current result item's price in provide currency |
+| items.*.price_currency | string | Current result item's price currency name |
+| items.*.shipping_price | number/null | Current result item's shipment cost |
+| items.*.title | string | Title of the current item |
+| items.*.description | string | Description of the current item |
+| items.*.valid_until | string | Determine when current item will be still valid |
+| items.*.brand | string | Category of the current item |
+| per_page | number | Number of items per page |
+| page | number | Current page number |
+| total_page | number | Total number of pages can be formed by provided parameters. |
+| count | number | Total number of items can be retrieved by provided parameters |
