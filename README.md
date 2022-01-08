@@ -14,8 +14,7 @@ You can check out live demo from [here](https://ebay.minlwinkyaw.com/api/search)
 * Create `.env`
 * Copy `.env.example` to `.env`
 * Fill `EBAY_APPID` with EBay Developer APPID
-* To use Google Analytics add view id to .env as `ANALYTICS_VIEW_ID`
-* run `php artisan server`
+* run `php artisan serve`
 * Search API endpoint can be access through `<APP_URL>/api/search`
 
 ## Parameters For Search EndPoint
