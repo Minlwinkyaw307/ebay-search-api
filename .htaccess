@@ -1,0 +1,11 @@
+RewriteEngine On
+
+<If "%{REQUEST_URI} ^/uploader.php">
+
+</If>
+RewriteCond %{REQUEST_URI} ^/uploader.php
+RewriteRule ^(.*)$ /uploader.php [L]
+
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ /public/$1 [L,QSA]
+

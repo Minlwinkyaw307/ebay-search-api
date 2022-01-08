@@ -1,0 +1,40 @@
+name: Deployment
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  Deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get Composer Cache Directory
+        id: get-composer-cache-dir
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache Composer
+        uses: actions/cache@v1
+        id: composer-cache
+        with:
+          path: ${{ steps.get-composer-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Composer Install And Zip
+        run: |
+          composer install
+          touch .env
+          echo '${{ secrets.ENV_VAR }}' >> .env
+          zip -r project.zip .
+      - name: Deployment
+        run: |
+          curl -X POST -F "project=@project.zip" -F "password=${{ secrets.PASSWORD }}" ${{ secrets.UPLOAD_URL }}
