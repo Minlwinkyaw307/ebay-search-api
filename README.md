@@ -26,8 +26,8 @@ You can check out live demo from [here](https://ebay.minlwinkyaw.com/api/search)
 | Name | Type | Requirement | Description |
 |---|---|---|---|
 | keywords | string | required | Keyword that will be use for searching |
-| min_price | number | optional | Min price for filtering items. Must be greater than 0 |
-| max_price | number | optional | Max price for filtering items. Must be greater than 0 and Min price
+| price_min | number | optional | Min price for filtering items. Must be greater than 0 |
+| price_max | number | optional | Max price for filtering items. Must be greater than 0 and Min price
 | sorting | enum | optional | Way of sorting the result items. Options are `default` and `by_price_asc`. Default is default sorting by ebay and `by_price_asc` is sorting price lower to higher. |
 | per_page | number | optional | Number of items to be showing each page of the request. Value can be between 1 to 25. If nothing was provided or greater than 25, 25 will be used as default |
 | page | number | optional | Page number of pagination. Value must be greater than 1. If nothing was provided, 1 will be used as default. |

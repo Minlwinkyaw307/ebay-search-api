@@ -17,18 +17,18 @@ class EBaySearchByKeywordsService extends EBayService
             "keywords" => $keyword,
         ];
 
-        if (array_key_exists('min_price', $filters)) {
+        if (array_key_exists('price_min', $filters)) {
             if (!array_key_exists('itemFilter', $body)) {
                 $body['itemFilter'] = [];
             }
-            $body['itemFilter']['MinPrice'] = $filters['min_price'];
+            $body['itemFilter']['MinPrice'] = $filters['price_min'];
         }
 
-        if (array_key_exists('max_price', $filters)) {
+        if (array_key_exists('price_max', $filters)) {
             if (!array_key_exists('itemFilter', $body)) {
                 $body['itemFilter'] = [];
             }
-            $body['itemFilter']['MaxPrice'] = $filters['max_price'];
+            $body['itemFilter']['MaxPrice'] = $filters['price_max'];
         }
 
         if (!array_key_exists('paginationInput', $body)) {
