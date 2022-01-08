@@ -31,6 +31,14 @@ class EBayService
         return $responses->toArray();
     }
 
+    public function isAssoc(array $arr): bool
+    {
+        if (array() === $arr) {
+            return false;
+        }
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
     /**
      * @param $data
      * @param $xml_data
@@ -38,8 +46,12 @@ class EBayService
     protected function arrayToXML($data, &$xml_data) {
         foreach( $data as $key => $value ) {
             if( is_array($value) ) {
-                if( is_numeric($key) ){
-                    $key = 'item'.$key; //dealing with <0/>..<n/> issues
+                if (!$this->isAssoc($value)) {
+                    foreach($value as $v) {
+                        $parent = $xml_data->addChild($key);
+                        $this->arrayToXML($v, $parent);
+                    }
+                    continue;
                 }
                 $subNode = $xml_data->addChild($key);
                 $this->arrayToXML($value, $subNode);
