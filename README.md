@@ -1,6 +1,6 @@
 ## **EBay Search API**
 
-You can check out live demo from [here](http://ebay.minlwinkyaw.com)
+You can check out live demo from [here](https://ebay.minlwinkyaw.com/api/search)
 
 ## **Requirements**
 
