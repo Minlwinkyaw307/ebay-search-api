@@ -19,6 +19,9 @@ class EBayItem
     private $valid_until;
     private $brand;
 
+    /**
+     * @param $ebayItemArray
+     */
     public function __construct($ebayItemArray)
     {
         $this->item_id = $ebayItemArray["itemId"][0];
@@ -43,7 +46,9 @@ class EBayItem
         $this->brand = $ebayItemArray['primaryCategory'][0]['categoryName'][0];
     }
 
-
+    /**
+     * @return array
+     */
     public function toArray(): array
     {
         return get_object_vars($this);

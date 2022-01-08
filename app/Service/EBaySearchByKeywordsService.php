@@ -7,8 +7,6 @@ use SimpleXMLElement;
 
 class EBaySearchByKeywordsService extends EBayService
 {
-
-
     /**
      * @param $keyword
      * @param $filters
