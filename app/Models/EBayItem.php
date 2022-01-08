@@ -32,7 +32,13 @@ class EBayItem
         $this->title = $ebayItemArray['title'][0];
         // didn't see any kind of description in response
         $this->description = $ebayItemArray['title'][0];
-        $this->valid_until = $ebayItemArray['sellingStatus'][0]['timeLeft'][0];
+
+        preg_match('/P?(\d+)DT?(\d+)H?(\d+)M?(\d+)S/', $ebayItemArray['sellingStatus'][0]['timeLeft'][0], $matches);
+        if (count($matches) === 5) {
+            $this->valid_until = $matches[1] . " day(s) " . $matches[2] . " hour(s) " . $matches[3] . " minute(s) " . $matches[4] . " second(s)";
+        }else {
+            $this->valid_until = $ebayItemArray['sellingStatus'][0]['timeLeft'][0];
+        }
         // didn't find brand only see category
         $this->brand = $ebayItemArray['primaryCategory'][0]['categoryName'][0];
     }
