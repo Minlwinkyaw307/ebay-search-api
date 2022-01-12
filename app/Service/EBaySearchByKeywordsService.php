@@ -78,7 +78,7 @@ class EBaySearchByKeywordsService extends EBayService
         $response = !$response ? [] : $response["findItemsByKeywordsResponse"][0];
 
         $formattedItems = $this->formatResults(
-            $response["searchResult"][0]["item"]
+            optional($response["searchResult"][0])["item"] ?? []
         );
 
         return [
